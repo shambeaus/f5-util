@@ -1,6 +1,6 @@
 from f5.bigip import ManagementRoot
 import sys
-from F5_Tools import F5_Tools
+from F5_Config import F5_Config
 import requests
 import pprint
 
@@ -21,17 +21,17 @@ virtuals_data = mgmt.tm.ltm.virtuals.get_collection()
 pools_data = mgmt.tm.ltm.pools.get_collection()
 
 
-f5_tools = F5_Tools()
+f5_config = F5_Config()
 
 
 
 
 #Create new VIP
 
-f5_tools.qc_vip(virtuals_data, pools_data, vip_name, destination_IP, pool_name)
+f5_config.qc_vip(virtuals_data, pools_data, vip_name, destination_IP, pool_name)
 
-pooloutput = f5_tools.create_new_pool(mgmt, partition, pool_name, pool_members)
-vipoutput = f5_tools.create_new_vip(mgmt, virtuals_data, partition, vip_name, destination_IP, pool_name)
+pooloutput = f5_config.create_new_pool(mgmt, partition, pool_name, pool_members)
+vipoutput = f5_config.create_new_vip(mgmt, virtuals_data, partition, vip_name, destination_IP, pool_name)
 
 
 

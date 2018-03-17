@@ -1,7 +1,7 @@
 from f5.bigip import ManagementRoot
 import sys
 
-class F5_Tools(object):
+class F5_Config(object):
 
     def create_new_pool(self, mgmt, part, pool_name, pool_members):
         output = []
@@ -13,7 +13,7 @@ class F5_Tools(object):
         # Verify pool was created
         if mgmt.tm.ltm.pools.pool.exists(partition=part, name=pool_name):
             print('Successfully created pool : ' + pool_name)
-            # NEED too append this to the output
+            #collect raw data of pool created
             output.append(pool.raw)
         else:
             print('something is frigged')
@@ -23,6 +23,7 @@ class F5_Tools(object):
             for member in pool_members:
                 pool_member = pool.members_s.members.create(partition=part, name=member)
                 print(' Added member ' + member)
+                #collect raw data of pool members created
                 output.append(pool_member.raw)         
         else:
             print('no members provided')
@@ -39,6 +40,7 @@ class F5_Tools(object):
             virtual = mgmt.tm.ltm.virtuals.virtual.create(partition=part, name=vip_name, ipProtocol='tcp', pool=pool_name, destination=destination_IP)
         if mgmt.tm.ltm.virtuals.virtual.exists(partition=part, name=vip_name):
             print('Successfully created VIP : ' + vip_name)
+            #Collect raw data of VIP created
             output = virtual.raw
             return output
         else:
