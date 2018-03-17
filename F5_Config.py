@@ -46,7 +46,7 @@ class F5_Config(object):
         else:
             print('something is frigged')
 
-    def qc_vip(self, virtuals_data, pools_data, vip_name, destination_IP, pool_name):
+    def qc_vip(self, virtuals_data, pools_data, vip_name, destination_IP, pool_name, selfip_data, nat_IP):
         for line in virtuals_data:
             if vip_name in line.name:
                 print('VIP ' + vip_name + ' already exists')
@@ -58,6 +58,11 @@ class F5_Config(object):
             if pool_name in line.name:
                 print('Pool ' + pool_name + ' already in use')
                 sys.exit()
+        for line in selfip_data:
+            if nat_IP in line.address:
+                print('Nat IP ' + nat_IP + ' already used as Self IP')
+
+       
 
 
 
