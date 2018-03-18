@@ -3,6 +3,30 @@ import sys
 
 class F5_Config(object):
 
+
+    ###################################
+    ## Virtual Config
+    ###################################
+
+
+    def create_new_vip(self, mgmt, virtuals_data, part, vip_name, destination_IP, pool_name):
+        if mgmt.tm.ltm.virtuals.virtual.exists(partition=part, name=vip_name):
+            print('Virtual already exists')
+            sys.exit()        
+        else:
+            virtual = mgmt.tm.ltm.virtuals.virtual.create(partition=part, name=vip_name, ipProtocol='tcp', pool=pool_name, destination=destination_IP)
+        if mgmt.tm.ltm.virtuals.virtual.exists(partition=part, name=vip_name):
+            print('Successfully created VIP : ' + vip_name)
+            #Collect raw data of VIP created
+            output = virtual.raw
+            return output
+        else:
+            print('something is frigged')
+
+    ###################################
+    ## Pool Config
+    ###################################
+
     def create_new_pool(self, mgmt, part, pool_name, pool_members):
         output = []
         # Check if there is an existing pool
@@ -32,19 +56,9 @@ class F5_Config(object):
         return output
 
 
-    def create_new_vip(self, mgmt, virtuals_data, part, vip_name, destination_IP, pool_name):
-        if mgmt.tm.ltm.virtuals.virtual.exists(partition=part, name=vip_name):
-            print('Virtual already exists')
-            sys.exit()        
-        else:
-            virtual = mgmt.tm.ltm.virtuals.virtual.create(partition=part, name=vip_name, ipProtocol='tcp', pool=pool_name, destination=destination_IP)
-        if mgmt.tm.ltm.virtuals.virtual.exists(partition=part, name=vip_name):
-            print('Successfully created VIP : ' + vip_name)
-            #Collect raw data of VIP created
-            output = virtual.raw
-            return output
-        else:
-            print('something is frigged')
+    ###################################
+    ## Quality Check
+    ###################################
 
     def qc_vip(self, virtuals_data, pools_data, vip_name, destination_IP, pool_name, selfip_data, nat_IP):
         for line in virtuals_data:
@@ -61,6 +75,8 @@ class F5_Config(object):
         for line in selfip_data:
             if nat_IP in line.address:
                 print('Nat IP ' + nat_IP + ' already used as Self IP')
+
+
 
        
 

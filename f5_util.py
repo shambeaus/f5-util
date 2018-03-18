@@ -2,6 +2,7 @@ from f5.bigip import ManagementRoot
 import sys
 from F5_Config import F5_Config
 from F5_Stats import F5_Stats
+import time
 import requests
 import pprint
 import argparse
@@ -23,11 +24,14 @@ mgmt = ManagementRoot("192.168.109.130", "admin", "pass", token='true')
 #pool_name = 'POOL-{}-{}'.format(public_IP,port)
 
 
+
+public_IP = '14.7.55.158'
+nat_IP = '192.182.69.222'
+
+
 partition = 'Common'
-public_IP = '14.7.55.55'
-nat_IP = '192.182.6.62'
 port = ['80','443']
-pool_members = [['192.168.5.5:80', '192.168.12.5:80'], ['192.168.5.5:443', '192.168.12.5:443']]
+pool_members = [['192.168.5.5:80', '192.168.12.5:80', '192.168.12.99:80'], ['192.168.5.5:443', '192.168.12.5:443',  '192.168.55.5:443']]
 vip_name = ['VS-{}-{}'.format(public_IP,port[0]), 'VS-{}-{}'.format(public_IP,port[1])]
 destination_IP = ['{}:{}'.format(nat_IP,port[0]) , '{}:{}'.format(nat_IP,port[1])]
 pool_name = ['POOL-{}-{}'.format(public_IP,port[0]) , 'POOL-{}-{}'.format(public_IP,port[1])]
@@ -52,8 +56,15 @@ arp_data = mgmt.tm.net.arps.get_collection()
 
 #Create new VIP
 
+print('Performing quality check on provided IPs')
+print('')
+
 f5_config.qc_vip(virtuals_data, pools_data, vip_name[0], destination_IP[0], pool_name[0], selfip_data, nat_IP)
 f5_config.qc_vip(virtuals_data, pools_data, vip_name[1], destination_IP[1], pool_name[1], selfip_data, nat_IP)
+time.sleep(3)
+print('No issues found, creating VIPs')
+print('')
+time.sleep(3)
 
 pooloutput = f5_config.create_new_pool(mgmt, partition, pool_name[0], pool_members[0])
 vipoutput = f5_config.create_new_vip(mgmt, virtuals_data, partition, vip_name[0], destination_IP[0], pool_name[0])
