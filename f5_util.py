@@ -25,13 +25,15 @@ mgmt = ManagementRoot("192.168.109.130", "admin", "pass", token='true')
 
 
 
-public_IP = '14.7.55.158'
-nat_IP = '192.182.69.222'
+public_IP = '15.1.59.166'
+nat_IP = '192.255.6.39'
+pool_members = [['192.168.5.5:80', '192.168.12.5:80', '192.168.12.99:80'], ['192.168.5.5:443', '192.168.12.5:443',  '192.168.55.5:443']]
+
+
 
 
 partition = 'Common'
 port = ['80','443']
-pool_members = [['192.168.5.5:80', '192.168.12.5:80', '192.168.12.99:80'], ['192.168.5.5:443', '192.168.12.5:443',  '192.168.55.5:443']]
 vip_name = ['VS-{}-{}'.format(public_IP,port[0]), 'VS-{}-{}'.format(public_IP,port[1])]
 destination_IP = ['{}:{}'.format(nat_IP,port[0]) , '{}:{}'.format(nat_IP,port[1])]
 pool_name = ['POOL-{}-{}'.format(public_IP,port[0]) , 'POOL-{}-{}'.format(public_IP,port[1])]
@@ -81,6 +83,8 @@ vipoutput = f5_config.create_new_vip(mgmt, virtuals_data, partition, vip_name[1]
 ###################################
 ## Stat Collection
 ###################################
+
+#pool_name = ''
 
 #pool_stats = f5_stats.get_pool_stats(mgmt, pool_name, partition)
 #f5_stats.format_pool_stats(pool_name, pool_stats)

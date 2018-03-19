@@ -36,3 +36,11 @@ class F5_Stats(object):
             print('Pool member Max Conns : ' + str(pool_stats[i].stat.serverside_maxConns['value']))
             print('--------------------')
             i += 1
+
+
+    def HA_status(self,mgmt):
+        x = Stats(mgmt.tm.cm.failover_status.load())
+        output = x.stat['status']['description']
+        return output
+
+

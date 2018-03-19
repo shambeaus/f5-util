@@ -23,6 +23,8 @@ class F5_Config(object):
         else:
             print('something is frigged')
 
+        #def delete_vip
+
     ###################################
     ## Pool Config
     ###################################
@@ -55,6 +57,40 @@ class F5_Config(object):
             sys.exit()
         return output
 
+    def add_members(self, pool_name, member_list):
+        pool = mgmt.tm.ltm.pools.pool.load(name=pool_name)
+
+        for m in member_list:
+            member = pool.members_s.members.create(partition='Common', name=m)
+            print('Member {} added to pool {}'.format(m,pool_name))
+
+
+    def replace_members(self, pool_name, member_list):
+        pool = mgmt.tm.ltm.pools.pool.load(name=pool_name)
+
+        members =  pool.members_s.get_collection()
+        existing_members = set([m.name for m in members])
+        new_members = set(member_list)
+
+        add_members = new_members - existing_members
+        remove_members = existing_members - new_members
+
+        for m in add_members:
+            member = pool.members_s.members.create(partition='Common', name=m)
+            print('Added pool member ' + m)
+
+        for m in remove_members:
+            member = pool.members_s.members.load(partition='Common', name=m)
+            member.delete()
+            print('Removed Pool member ' + m)
+
+
+
+    #def pool_member status():
+
+    #def delete_pool:
+
+        
 
     ###################################
     ## Quality Check
@@ -75,12 +111,11 @@ class F5_Config(object):
         for line in selfip_data:
             if nat_IP in line.address:
                 print('Nat IP ' + nat_IP + ' already used as Self IP')
+                sys.exit()
 
 
 
-       
+   
 
 
 
-#    def update_pool_members(self, mgmt, pool_name, pool_members):
-        
