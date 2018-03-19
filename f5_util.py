@@ -11,7 +11,7 @@ import argparse
 f5_config = F5_Config()
 f5_stats = F5_Stats()
 
-mgmt = ManagementRoot("192.168.109.130", "admin", "pass", token='true')
+mgmt = ManagementRoot("f5lab", "admin", "pass", token='true')
 
 
 ###################################
