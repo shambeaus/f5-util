@@ -59,10 +59,15 @@ class F5_Config(object):
 
     def add_members(self, pool_name, member_list):
         pool = mgmt.tm.ltm.pools.pool.load(name=pool_name)
+        members =  pool.members_s.get_collection()
 
         for m in member_list:
-            member = pool.members_s.members.create(partition='Common', name=m)
-            print('Member {} added to pool {}'.format(m,pool_name))
+            if pool.members_s.members.exists(partition='Common', name=m):
+                print('Pool member ' + m + ' already exists')
+                sys.exit()
+            else:
+                member = pool.members_s.members.create(partition='Common', name=m)
+                print('Member {} added to pool {}'.format(m,pool_name))
 
 
     def replace_members(self, pool_name, member_list):
@@ -114,8 +119,10 @@ class F5_Config(object):
                 sys.exit()
 
 
-
-   
+    def save_sys_config(self, mgmt):
+        #need to figure out how to get status of command
+        output = mgmt.tm.sys.config.exec_cmd('save')
+        return output
 
 
 

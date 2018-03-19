@@ -5,10 +5,6 @@ import pprint
 
 class F5_Stats(object):
 
-    def check_version(self, mgmt):
-        output = mgmt.tmos_version
-        return output
-
     def get_pool_stats(self, mgmt, pool_name, part):
         #List for stats from all members 
         output = []
@@ -44,6 +40,10 @@ class F5_Stats(object):
     def HA_status(self,mgmt):
         x = Stats(mgmt.tm.cm.failover_status.load())
         output = x.stat['status']['description']
+        return output
+
+    def check_version(self, mgmt):
+        output = mgmt.tmos_version
         return output
 
     #def network_map(self)

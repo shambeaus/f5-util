@@ -28,16 +28,10 @@ for line in virtuals:
 
 pprint.pprint(f5_map)
 
+pool_members = [['192.168.5.5:80', '192.168.12.5:80'], ['192.168.5.5:443', '192.168.12.5:443']]
 
 
-
-
-
-
-
-
-
-
+#cciphers = b.tm.util.clientssl_ciphers.exec_cmd('run', utilCmdArgs='TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:@STRENGTH')
 
 
 

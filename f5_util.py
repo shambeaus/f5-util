@@ -13,13 +13,28 @@ f5_stats = F5_Stats()
 
 mgmt = ManagementRoot("192.168.109.130", "admin", "pass", token='true')
 
-## Version Check, This has only been tested on 12.1.3 
+
+###################################
+## Pre-Checks
+###################################
+
+## This has only been tested on 12.1.3 
 
 version = f5_stats.check_version(mgmt)
+ha_status = f5_stats.HA_status(mgmt)
+
+if 'ACTIVE' in ha_status:
+    print('Connected to active unit in HA')
+else:
+    print('Connected to secondary unit, exiting')
+    sys.exit()
+
+
 
 if version < '12.1.3':
     print('F5 running code version ' + version + ' this is only tested on 12.1.3')
     sys.exit()
+
 
 
 #partition = 'Common'
