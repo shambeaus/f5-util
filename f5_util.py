@@ -13,6 +13,14 @@ f5_stats = F5_Stats()
 
 mgmt = ManagementRoot("192.168.109.130", "admin", "pass", token='true')
 
+## Version Check, This has only been tested on 12.1.3 
+
+version = f5_stats.check_version(mgmt)
+
+if version < '12.1.3':
+    print('F5 running code version ' + version + ' this is only tested on 12.1.3')
+    sys.exit()
+
 
 #partition = 'Common'
 #pool_members = ['192.168.5.5:80', '192.168.12.5:80']
