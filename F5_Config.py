@@ -54,7 +54,6 @@ class F5_Config(object):
         else:
             print('no members provided')
             return output
-            sys.exit()
         return output
 
     def add_members(self, pool_name, member_list):
