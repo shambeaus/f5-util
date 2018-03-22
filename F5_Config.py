@@ -89,10 +89,51 @@ class F5_Config(object):
             print('Removed Pool member ' + m)
 
 
+    def pool_member_force_offline(self, mgmt, part, pool_name, pool_member):
+        if mgmt.tm.ltm.pools.pool.exists(partition=part, name=pool_name):
+            pool = mgmt.tm.ltm.pools.pool.load(partition=part, name=pool_name)
+        else:
+            print('Pool {} does not exist'.format(pool_name))
+            sys.exit()
+        if pool.members_s.members.exists (partition=part, name=pool_member):
+            member = pool.members_s.members.load(partition=part, name=pool_member) 
+        else:
+            print('Member {} not part of pool {}'.format(pool_member,pool_name))
+            sys.exit()
+        member.state = 'user-down'
+        member.session = 'user-disabled'
+        member.update()
+        print('Forced Offline {}'.format(pool_member))
+        
+    def pool_member_enable(self, mgmt, part, pool_name, pool_member):
+        if mgmt.tm.ltm.pools.pool.exists(partition=part, name=pool_name):
+            pool = mgmt.tm.ltm.pools.pool.load(partition=part, name=pool_name)
+        else:
+            print('Pool {} does not exist'.format(pool_name))
+        if pool.members_s.members.exists (partition=part, name=pool_member):
+            member = pool.members_s.members.load(partition=part, name=pool_member) 
+        else:
+            print('Member {} not part of pool {}'.format(pool_member,pool_name))
+            sys.exit()
+        member.state = 'user-up'
+        member.session = 'user-enabled'
+        member.update()
+        print('Enabled {}'.format(pool_member))
 
-    #def pool_member status():
+    def pool_member_disable(self, mgmt, part, pool_name, pool_member):
+        if mgmt.tm.ltm.pools.pool.exists(partition=part, name=pool_name):
+            pool = mgmt.tm.ltm.pools.pool.load(partition=part, name=pool_name)
+        else:
+            print('Pool {} does not exist'.format(pool_name))
+        if pool.members_s.members.exists (partition=part, name=pool_member):
+            member = pool.members_s.members.load(partition=part, name=pool_member) 
+        else:
+            print('Member {} not part of pool {}'.format(pool_member,pool_name))
+            sys.exit()
+        member.session = 'user-disabled'
+        member.update()
+        print('Disabled {}'.format(pool_member))
 
-    #def delete_pool:
 
         
 
