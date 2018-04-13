@@ -39,7 +39,7 @@ pool_members = [['192.168.5.5:80', '192.168.12.5:80'], ['192.168.5.5:443', '192.
 
 #pools = []
 #
-#pool = 'POOL-TOWN-BURG'
+#pool = ''
 ##
 #all_pools = mgmt.tm.ltm.pools.get_collection()
 #
